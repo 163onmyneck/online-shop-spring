@@ -106,6 +106,7 @@
 				</executions>
 				<configuration>
 					<configLocation>${maven.checkstyle.plugin.configLocation}</configLocation>
+					<sourceDirectories>${project.build.sourceDirectory},${project.build.testSourceDirectory}</sourceDirectories>
 					<consoleOutput>true</consoleOutput>
 					<failsOnError>true</failsOnError>
 					<linkXRef>false</linkXRef>
