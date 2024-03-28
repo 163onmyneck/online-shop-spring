@@ -42,7 +42,7 @@ public class BookServiceImpl implements BookService {
         if (getById(id) != null) {
             return bookMapper.toDto(bookRepository.save(book));
         }
-        throw new EntityNotFoundException("Book with this id doesn't exist");
+        throw new EntityNotFoundException("Book with this id doesn't exist. Id:" + id);
     }
 
     @Override
