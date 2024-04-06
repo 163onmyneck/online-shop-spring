@@ -22,4 +22,5 @@ public class UserRegistrationRequestDto {
     @NotBlank
     @Length(min = 8, max = 35)
     private String repeatPassword;
+    private String shippingAddress;
 }
