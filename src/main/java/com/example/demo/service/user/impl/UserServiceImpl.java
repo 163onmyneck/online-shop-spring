@@ -4,6 +4,7 @@ import com.example.demo.dto.user.UserRegistrationRequestDto;
 import com.example.demo.dto.user.UserResponseDto;
 import com.example.demo.exception.RegistrationException;
 import com.example.demo.mapper.UserMapper;
+import com.example.demo.model.Role.RoleName;
 import com.example.demo.model.User;
 import com.example.demo.repository.role.RoleRepository;
 import com.example.demo.repository.user.UserRepository;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private static final long USER_ID = 1;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(requestDto.getEmail()).isEmpty()) {
             requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
             User user = userMapper.toModel(requestDto);
-            user.setRoles(Set.of(roleRepository.findById(USER_ID).get()));
+            user.setRoles(Set.of(roleRepository.findByRoleName((RoleName.USER)).get()));
             return userMapper.toDto(userRepository.save(user));
         }
         throw new RegistrationException("Can not register user with email: "
