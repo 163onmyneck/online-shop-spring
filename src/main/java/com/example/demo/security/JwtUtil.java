@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
-    private static final String secretString = "asdsddfgdfgdfgdfgdfgdfgdfg";
-    private long expiration;
+    private static final String secretString = "asdasfsdafdsfsdfs";
+    private static final long expiration = 300000L;
     private Key secret;
 
     public JwtUtil(String secretString) {
