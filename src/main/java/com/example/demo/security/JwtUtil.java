@@ -13,16 +13,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
-    private static final String secretString = "asdasfsdafdsfsdfs";
+    private static final Key secret = Keys.hmacShaKeyFor(
+                        "asdasfserdsfvxvsdfgdgdfgqwew2134324dfgdfgdafdsfsdfs"
+                            .getBytes(StandardCharsets.UTF_8));
     private static final long expiration = 300000L;
-    private Key secret;
-
-    public JwtUtil(String secretString) {
-        secret = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
-    }
-
-    public JwtUtil() {
-    }
 
     public String generateToken(String userEmail) {
         return Jwts.builder()
