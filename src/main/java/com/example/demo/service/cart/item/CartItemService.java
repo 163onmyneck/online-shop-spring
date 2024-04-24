@@ -11,4 +11,6 @@ public interface CartItemService {
     CartItemResponseDto getById(Long id);
 
     void deleteById(Long id);
+
+    void addQuantity(Long id, int quantity);
 }
