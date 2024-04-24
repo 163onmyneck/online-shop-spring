@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
-    @Query("FROM ShoppingCart sc WHERE sc.user.email = :email")
+    @Query("SELECT sc FROM ShoppingCart sc JOIN sc.user u WHERE u.email = :email")
     Optional<ShoppingCart> findByUserEmail(@Param("email") String email);
 }
