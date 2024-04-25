@@ -25,11 +25,15 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItemResponseDto saveItemToShoppingCart(CartItemRequestDto cartItemRequestDto,
                                                       ShoppingCartDto shoppingCartDto) {
+        CartItem item = cartItemMapper.toModel(cartItemRequestDto);
+        item.setBook(bookRepository.findById(cartItemRequestDto.getBookId()).orElseThrow(
+                () -> new EntityNotFoundException("Can not find book by id:"
+                + cartItemRequestDto.getBookId())));
         shoppingCartDto.getCartItems().add(
                         cartItemMapper.toDto(cartItemRepository
-                .save(cartItemMapper.toModel(cartItemRequestDto, bookRepository))));
+                .save(item)));
         return cartItemMapper.toDto(
-            cartItemRepository.save(cartItemMapper.toModel(cartItemRequestDto, bookRepository)));
+            cartItemRepository.save(item));
     }
 
     @Transactional
