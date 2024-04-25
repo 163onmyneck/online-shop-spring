@@ -6,4 +6,6 @@ import com.example.demo.exception.RegistrationException;
 
 public interface UserService {
     UserResponseDto register(UserRegistrationRequestDto requestDto) throws RegistrationException;
+
+    Long getUserIdByEmail(String email);
 }

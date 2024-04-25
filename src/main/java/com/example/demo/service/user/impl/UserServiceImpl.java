@@ -38,4 +38,9 @@ public class UserServiceImpl implements UserService {
         throw new RegistrationException("Can not register user with email: "
             + requestDto.getEmail() + " User with this email already exists");
     }
+
+    @Override
+    public Long getUserIdByEmail(String email) {
+        return userRepository.getIdByEmail(email);
+    }
 }
