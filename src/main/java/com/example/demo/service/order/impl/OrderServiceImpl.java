@@ -35,9 +35,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getAllOrders(String email) {
-        return orderRepository.findAllByUserEmail(email).stream()
-                                                        .map(orderMapper::toDto)
-                                                        .toList();
+        return orderMapper.toDtos(orderRepository.findAllByUserEmail(email));
     }
 
     @Override
@@ -87,9 +85,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
                 "Can not find order by id:" + id));
 
-        return order.getOrderItems().stream()
-            .map(orderItemMapper::toDto)
-            .toList();
+        return orderItemMapper.toDtos(order.getOrderItems());
     }
 
     @Override
