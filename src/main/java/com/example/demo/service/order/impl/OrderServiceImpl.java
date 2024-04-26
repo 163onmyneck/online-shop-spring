@@ -15,7 +15,6 @@ import com.example.demo.repository.order.OrderRepository;
 import com.example.demo.repository.shopping.cart.ShoppingCartRepository;
 import com.example.demo.service.order.OrderService;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +41,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto setOrderStatus(Long id, String status) {
         Order order = orderRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Can not find order by id:" + id));
+                                    .orElseThrow(() -> new EntityNotFoundException(
+                                        "Can not find order by id:" + id));
 
         order.setStatus(Status.valueOf(status));
         return orderMapper.toDto(orderRepository.save(order));
