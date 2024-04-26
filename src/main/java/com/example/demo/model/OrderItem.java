@@ -6,41 +6,44 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@Table(name = "books")
-@SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
-@SQLRestriction(value = "is_deleted=false")
+@Table(name = "order_items")
+@SQLDelete(sql = "UPDATE order_items SET is_deleted = true WHERE id = ?")
+@SQLRestriction(value = "WHERE is_deleted=false")
 @Getter
 @Setter
-public class Book {
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+    @OneToOne
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
     @Column(nullable = false)
-    private String title;
-    @Column(nullable = false)
-    private String author;
-    @Column(nullable = false, unique = true)
-    private String isbn;
+    private int quantity;
     @Column(nullable = false)
     private BigDecimal price;
-    private String description;
-    private String coverImage;
     @Column(nullable = false)
     private boolean isDeleted;
-    @ManyToMany
-    @JoinTable(name = "book_category",
-                joinColumns = @JoinColumn(name = "book_id"),
-                inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories;
+
+    public OrderItem() {
+    }
+
+    public OrderItem(CartItem cartItem) {
+        this.book = cartItem.getBook();
+        this.price = cartItem.getBook().getPrice();
+        this.quantity = cartItem.getQuantity();
+    }
 }
