@@ -46,6 +46,15 @@ public class Order {
     @Column(nullable = false)
     private boolean isDeleted;
 
+    public Order() {
+    }
+
+    public Order(ShoppingCart shoppingCart) {
+        this.user = shoppingCart.getUser();
+        this.status = Status.PENDING;
+        this.orderDate = LocalDateTime.now();
+    }
+
     @Getter
     public enum Status {
         PENDING("PENDING"),

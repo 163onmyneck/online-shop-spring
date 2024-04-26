@@ -37,4 +37,13 @@ public class OrderItem {
     private BigDecimal price;
     @Column(nullable = false)
     private boolean isDeleted;
+
+    public OrderItem() {
+    }
+
+    public OrderItem(CartItem cartItem) {
+        this.book = cartItem.getBook();
+        this.price = cartItem.getBook().getPrice();
+        this.quantity = cartItem.getQuantity();
+    }
 }

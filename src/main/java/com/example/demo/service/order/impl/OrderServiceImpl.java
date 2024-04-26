@@ -38,14 +38,15 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toDtos(orderRepository.findAllByUserEmail(email));
     }
 
+    @Transactional
     @Override
     public OrderDto setOrderStatus(Long id, String status) {
-        Optional<Order> order = orderRepository.findById(id);
-        if (order.isPresent()) {
-            order.get().setStatus(Status.valueOf(status));
-            return orderMapper.toDto(orderRepository.save(order.get()));
-        }
-        throw new EntityNotFoundException("Can not find order with email: " + id);
+        Order order = orderRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Can not find order by id:" + id));
+
+        order.setStatus(Status.valueOf(status));
+        return orderMapper.toDto(orderRepository.save(order));
+
     }
 
     @Transactional
@@ -55,13 +56,9 @@ public class OrderServiceImpl implements OrderService {
         if (shoppingCart.isEmpty()) {
             throw new EntityNotFoundException("Can not find shopping cart");
         }
-
         ShoppingCart userShoppingCart = shoppingCart.get();
 
-        Order userOrder = new Order();
-        userOrder.setUser(userShoppingCart.getUser());
-        userOrder.setStatus(Status.PENDING);
-        userOrder.setOrderDate(LocalDateTime.now());
+        Order userOrder = new Order(userShoppingCart);
         userOrder.setShippingAddress(shippingAddress);
         userOrder.setTotal(userShoppingCart.getCartItems().stream()
                                                         .map(i -> i.getBook().getPrice())
@@ -69,11 +66,7 @@ public class OrderServiceImpl implements OrderService {
         Set<OrderItem> orderItems = new HashSet<>();
 
         for (CartItem item : userShoppingCart.getCartItems()) {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrder(userOrder);
-            orderItem.setBook(item.getBook());
-            orderItem.setPrice(item.getBook().getPrice());
-            orderItem.setQuantity(item.getQuantity());
+            OrderItem orderItem = new OrderItem(item);
             orderItems.add(orderItem);
         }
         userOrder.setOrderItems(orderItems);
