@@ -24,9 +24,7 @@ public class OrderController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public OrderDto updateStatus(@PathVariable Long id, @RequestBody String status,
-                                 Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+    public OrderDto updateStatus(@PathVariable Long id, @RequestBody String status) {
         return orderService.setOrderStatus(id, status);
     }
 
