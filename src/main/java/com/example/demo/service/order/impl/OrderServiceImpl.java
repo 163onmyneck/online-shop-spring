@@ -17,7 +17,6 @@ import com.example.demo.service.order.OrderService;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,11 +51,9 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public OrderDto saveOrder(String email, String shippingAddress) {
-        Optional<ShoppingCart> shoppingCart = shoppingCartRepository.findByUserEmail(email);
-        if (shoppingCart.isEmpty()) {
-            throw new EntityNotFoundException("Can not find shopping cart");
-        }
-        ShoppingCart userShoppingCart = shoppingCart.get();
+        ShoppingCart userShoppingCart = shoppingCartRepository.findByUserEmail(email)
+                                        .orElseThrow(() -> new EntityNotFoundException(
+                                        "Can not find user's shopping cart. User email: " + email));
 
         Order userOrder = new Order(userShoppingCart);
         userOrder.setShippingAddress(shippingAddress);
