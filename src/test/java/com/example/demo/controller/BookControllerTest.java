@@ -26,6 +26,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
@@ -36,7 +37,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class BookControllerTest {
 
     protected static MockMvc mockMvc;
@@ -79,22 +80,24 @@ class BookControllerTest {
     @Transactional
     void getAll_ValidRequest_ShouldReturnAllAvailableBooks() throws Exception {
         List<BookDto> expected = new ArrayList<>();
-        expected.add(new BookDto().setId(1L)
-                                  .setTitle("Book Title1")
-                                  .setAuthor("Author Name1")
-                                  .setIsbn("1234567890123")
-                                  .setPrice(BigDecimal.valueOf(23.99))
-                                  .setDescription("Book description1")
-                                  .setCoverImage("image_url1")
-                                  .setCategories(new HashSet<>()));
-        expected.add(new BookDto().setId(2L)
-                                  .setTitle("Book Title2")
-                                  .setAuthor("Author Name2")
-                                  .setIsbn("12345678901232")
-                                  .setPrice(BigDecimal.valueOf(45.99))
-                                  .setDescription("Book description2")
-                                  .setCoverImage("image_url2")
-                                  .setCategories(new HashSet<>()));
+        expected.add(new BookDto()
+                         .setId(1L)
+                         .setTitle("Book Title1")
+                         .setAuthor("Author Name1")
+                         .setIsbn("1234567890123")
+                         .setPrice(BigDecimal.valueOf(23.99))
+                         .setDescription("Book description1")
+                         .setCoverImage("image_url1")
+                         .setCategories(new HashSet<>()));
+        expected.add(new BookDto()
+                         .setId(2L)
+                         .setTitle("Book Title2")
+                         .setAuthor("Author Name2")
+                         .setIsbn("12345678901232")
+                         .setPrice(BigDecimal.valueOf(45.99))
+                         .setDescription("Book description2")
+                         .setCoverImage("image_url2")
+                         .setCategories(new HashSet<>()));
 
         MvcResult result = mockMvc.perform(get("/books"))
                                   .andExpect(status().isOk())
@@ -136,19 +139,13 @@ class BookControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @DisplayName("method updates existing book by id")
     void update_ValidDto_ShouldReturnUpdatedBookDto() throws Exception {
-        CreateBookRequestDto requestDto = new CreateBookRequestDto().setAuthor(
-                                                                        "Expected Author")
-                                                                    .setTitle(
-                                                                        "Expected Title")
-                                                                    .setDescription(
-                                                                        "Expected Description")
-                                                                    .setIsbn(
-                                                                        "3432435345")
-                                                                    .setPrice(
-                                                                        BigDecimal.valueOf(
-                                                                            45.99))
-                                                                    .setCoverImage(
-                                                                        "Expected coverImage");
+        CreateBookRequestDto requestDto = new CreateBookRequestDto()
+                            .setAuthor("Expected Author")
+                            .setTitle("Expected Title")
+                            .setDescription("Expected Description")
+                            .setIsbn("3432435345")
+                            .setPrice(BigDecimal.valueOf(45.99))
+                            .setCoverImage("Expected coverImage");
 
         BookDto expected = new BookDto().setId(2L)
                                         .setAuthor("Expected Author")

@@ -24,14 +24,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceImplTest {
 
-    @InjectMocks
-    private CategoryServiceImpl categoryService;
-
     @Mock
     private CategoryRepository categoryRepository;
 
     @Mock
     private CategoryMapper categoryMapper;
+
+    @InjectMocks
+    private CategoryServiceImpl categoryService;
 
     @Test
     @DisplayName("Saving category with correct fields")
