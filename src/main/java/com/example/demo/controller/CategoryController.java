@@ -36,7 +36,8 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "get all exiting categories",
-                    description = "get all exiting categories by id")
+               description = "get all exiting categories by id"
+    )
     @GetMapping("/find-all")
     public List<CategoryResponseDto> getAll() {
         return categoryService.findAll();
@@ -54,7 +55,8 @@ public class CategoryController {
     @PutMapping("/{id}")
     public CategoryResponseDto updateCategory(@PathVariable Long id,
                                               @RequestBody CategoryRequestDto categoryDto) {
-        return categoryService.update(id, categoryDto);
+        return categoryService.update(id,
+                                      categoryDto);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -66,7 +68,8 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "get books by category id",
-                    description = "get available books by category id")
+               description = "get available books by category id"
+    )
     @GetMapping("/{id}/books")
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long id) {
         return bookService.getAllBooksByCategoryId(id);

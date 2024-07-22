@@ -6,6 +6,7 @@ import com.example.demo.exception.EntityNotFoundException;
 import com.example.demo.mapper.CategoryMapper;
 import com.example.demo.repository.category.CategoryRepository;
 import com.example.demo.service.category.CategoryService;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,10 +34,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryResponseDto update(Long id, CategoryRequestDto categoryRequestDto) {
         CategoryResponseDto categoryToUpdate = getById(id);
         categoryToUpdate.setName(categoryRequestDto.getName());
         categoryToUpdate.setDescription(categoryRequestDto.getDescription());
+        categoryRepository.save(categoryMapper.toModel(categoryRequestDto));
         return categoryToUpdate;
     }
 
